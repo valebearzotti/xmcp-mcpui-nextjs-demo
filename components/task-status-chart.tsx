@@ -21,7 +21,8 @@ export function TaskStatusChart() {
       fill: COLORS[column.id]
     }
   }).filter(item => item.value > 0) // Only show categories with tasks
-
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0]
