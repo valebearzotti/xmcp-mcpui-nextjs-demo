@@ -94,16 +94,11 @@ export default function Home() {
             </div>
             <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
               <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
-                🚀 Your MCP server is running at:
+                🚀 Your MCP server runs at:
               </p>
               <code className="text-sm font-mono text-blue-900 dark:text-blue-100">
-                {mcpUrl}
+                http://localhost:3000/mcp
               </code>
-              {isClient && (
-                <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
-                  {isLocal ? '(Local development)' : '(Vercel deployment)'}
-                </p>
-              )}
             </div>
             <div className="flex gap-3 justify-center mt-4">
               <Button
