@@ -7,6 +7,16 @@ import { BarChart3, Layout, Settings, Users, Copy } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Home() {
+  // Detect if running locally or on Vercel
+  const isLocal = typeof window !== 'undefined' && 
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  
+  const baseUrl = isLocal 
+    ? 'http://localhost:3000' 
+    : `https://${typeof window !== 'undefined' ? window.location.host : 'your-vercel-app.vercel.app'}`;
+  
+  const mcpUrl = `${baseUrl}/mcp`;
+
   const copyToClipboard = (text: string, configName: string) => {
     navigator.clipboard.writeText(text).then(() => {
       toast.success(`${configName} config copied to clipboard!`, {
@@ -24,7 +34,7 @@ export default function Home() {
   const cursorConfig = `{
   "mcpServers": {
     "my-project": {
-      "url": "http://localhost:3000/mcp"
+      "url": "${mcpUrl}"
     }
   }
 }`;
@@ -33,7 +43,7 @@ export default function Home() {
   "mcpServers": {
     "my-project": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "http://localhost:3000/mcp"]
+      "args": ["-y", "mcp-remote", "${mcpUrl}"]
     }
   }
 }`;
@@ -78,11 +88,14 @@ export default function Home() {
             </div>
             <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
               <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
-                🚀 This will start your MCP server at:
+                🚀 Your MCP server is running at:
               </p>
               <code className="text-sm font-mono text-blue-900 dark:text-blue-100">
-                http://localhost:3000/mcp
+                {mcpUrl}
               </code>
+              <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
+                {isLocal ? '(Local development)' : '(Vercel deployment)'}
+              </p>
             </div>
             <div className="flex gap-3 justify-center mt-4">
               <Button
