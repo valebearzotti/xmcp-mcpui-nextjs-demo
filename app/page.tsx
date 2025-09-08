@@ -3,19 +3,25 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BarChart3, Layout, Settings, Users, Copy } from "lucide-react";
+import { BarChart3, Layout, Settings, Users, Copy, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  // Detect if running locally or on Vercel
-  const isLocal = typeof window !== 'undefined' && 
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  
-  const baseUrl = isLocal 
-    ? 'http://localhost:3000' 
-    : `https://${typeof window !== 'undefined' ? window.location.host : 'your-vercel-app.vercel.app'}`;
-  
-  const mcpUrl = `${baseUrl}/mcp`;
+  const [mcpUrl, setMcpUrl] = useState('http://localhost:3000/mcp');
+  const [isLocal, setIsLocal] = useState(true);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const baseUrl = isLocalHost 
+      ? 'http://localhost:3000' 
+      : `https://${window.location.host}`;
+    
+    setIsLocal(isLocalHost);
+    setMcpUrl(`${baseUrl}/mcp`);
+  }, []);
 
   const copyToClipboard = (text: string, configName: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -65,9 +71,9 @@ export default function Home() {
             <div className="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 font-mono text-sm text-left">
               <div className="flex items-center mb-2">
                 <div className="flex space-x-1 mr-3">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div className="size-4 bg-red-500 rounded-full"></div>
+                  <div className="size-4 bg-yellow-500 rounded-full"></div>
+                  <div className="size-4 bg-green-500 rounded-full"></div>
                 </div>
                 <span className="text-gray-400">terminal</span>
               </div>
@@ -93,9 +99,11 @@ export default function Home() {
               <code className="text-sm font-mono text-blue-900 dark:text-blue-100">
                 {mcpUrl}
               </code>
-              <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
-                {isLocal ? '(Local development)' : '(Vercel deployment)'}
-              </p>
+              {isClient && (
+                <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
+                  {isLocal ? '(Local development)' : '(Vercel deployment)'}
+                </p>
+              )}
             </div>
             <div className="flex gap-3 justify-center mt-4">
               <Button
@@ -104,7 +112,7 @@ export default function Home() {
                 onClick={() => copyToClipboard(cursorConfig, "Cursor")}
                 className="text-xs"
               >
-                <Copy className="w-3 h-3 mr-2" />
+                <Copy className="size-4 mr-2" />
                 Copy Cursor Config
               </Button>
               <Button
@@ -113,7 +121,7 @@ export default function Home() {
                 onClick={() => copyToClipboard(claudeConfig, "Claude Desktop")}
                 className="text-xs"
               >
-                <Copy className="w-3 h-3 mr-2" />
+                <Copy className="size-4 mr-2" />
                 Copy Claude Desktop Config
               </Button>
             </div>
@@ -198,41 +206,34 @@ export default function Home() {
                       <span className="text-muted-foreground mr-2">•</span>
                       <div>
                         <code className="bg-muted px-2 py-1 rounded text-xs">get_tasks_status</code>
-                        <p className="text-muted-foreground mt-1">Get textual task status information</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-muted-foreground mr-2">•</span>
-                      <div>
-                        <code className="bg-muted px-2 py-1 rounded text-xs">nudge_team_member</code>
-                        <p className="text-muted-foreground mt-1">Send team member notifications</p>
+                        <p className="text-muted-foreground mt-1">Get textual representation of kanban board task status</p>
                       </div>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-card-foreground mb-3">UI Tools</h4>
+                  <h4 className="font-semibold text-card-foreground mb-3">UI Resource Tools</h4>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-start">
                       <span className="text-muted-foreground mr-2">•</span>
                       <div>
-                        <code className="bg-muted px-2 py-1 rounded text-xs">show_task_status</code>
-                        <p className="text-muted-foreground mt-1">Interactive task dashboard</p>
+                        <code className="bg-muted px-2 py-1 rounded text-xs">get_kanban_board</code>
+                        <p className="text-muted-foreground mt-1">Returns UI resource to render the kanban board page</p>
                       </div>
                     </li>
                     <li className="flex items-start">
                       <span className="text-muted-foreground mr-2">•</span>
                       <div>
-                        <code className="bg-muted px-2 py-1 rounded text-xs">show_user_status</code>
-                        <p className="text-muted-foreground mt-1">User profile interface</p>
+                        <code className="bg-muted px-2 py-1 rounded text-xs">get_task_status_chart</code>
+                        <p className="text-muted-foreground mt-1">Returns UI resource to render the task status chart</p>
                       </div>
                     </li>
                     <li className="flex items-start">
                       <span className="text-muted-foreground mr-2">•</span>
                       <div>
-                        <code className="bg-muted px-2 py-1 rounded text-xs">show_remote_dom_*</code>
-                        <p className="text-muted-foreground mt-1">Remote DOM components</p>
+                        <code className="bg-muted px-2 py-1 rounded text-xs">get_task_priority_chart</code>
+                        <p className="text-muted-foreground mt-1">Returns UI resource to render the task priority chart</p>
                       </div>
                     </li>
                   </ul>
@@ -253,46 +254,49 @@ export default function Home() {
                   This demo showcases the integration between three key technologies:
                 </p>
                 
-                <div className="space-y-3">
+                <div className="space-y-6">
                   <div>
-                    <h4 className="font-semibold text-card-foreground mb-1">xmcp</h4>
-                    <p className="text-xs text-muted-foreground">
+                    <a 
+                      href="https://xmcp.dev"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 group"
+                    >
+                      <h4 className="font-semibold text-card-foreground group-hover:text-primary transition-colors">xmcp</h4>
+                      <ExternalLink className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </a>
+                    <p className="text-sm text-muted-foreground">
                       The TypeScript framework for building and shipping MCP servers
                     </p>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-card-foreground mb-1">MCP-UI</h4>
-                    <p className="text-xs text-muted-foreground">
-                    Build rich, dynamic user interfaces for your MCP applications with SDKs that bring UI to AI interactions.
+                    <a 
+                      href="https://mcpui.dev"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 group"
+                    >
+                      <h4 className="font-semibold text-card-foreground group-hover:text-primary transition-colors">MCP-UI</h4>
+                      <ExternalLink className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </a>
+                    <p className="text-sm text-muted-foreground">
+                      Build rich, dynamic user interfaces for your MCP applications with SDKs that bring UI to AI interactions.
                     </p>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-2 pt-2">
-                  <a
-                    className="text-center rounded-md border border-solid border-transparent transition-colors bg-primary text-primary-foreground hover:bg-primary/90 font-medium text-sm h-9 px-3 flex items-center justify-center"
-                    href="https://github.com/modelcontextprotocol/mcp-ui"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View MCP-UI on GitHub
-                  </a>
-                  <a
-                    className="text-center rounded-md border border-solid border-border transition-colors hover:bg-accent hover:text-accent-foreground font-medium text-sm h-9 px-3 flex items-center justify-center"
-                    href="https://modelcontextprotocol.io"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Learn About MCP
-                  </a>
-                  <a
-                    className="text-center rounded-md border border-solid border-border transition-colors hover:bg-accent hover:text-accent-foreground font-medium text-sm h-9 px-3 flex items-center justify-center"
-                    href="https://github.com/modelcontextprotocol/create-mcp-server"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Explore xMCP
-                  </a>
+                  <div>
+                    <a 
+                      href="https://modelcontextprotocol.io/introduction"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 group"
+                    >
+                      <h4 className="font-semibold text-card-foreground group-hover:text-primary transition-colors">Model Context Protocol</h4>
+                      <ExternalLink className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </a>
+                    <p className="text-sm text-muted-foreground">
+                      An open standard for connecting AI assistants with external data sources and tools.
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
