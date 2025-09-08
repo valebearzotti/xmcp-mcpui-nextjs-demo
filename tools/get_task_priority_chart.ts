@@ -15,8 +15,8 @@ export const metadata = {
 // Tool implementation
 export default async function get_task_priority_chart() {
     // Get the current host from the request context
-    const requestHost = process.env.VERCEL_URL 
-      ? `${process.env.VERCEL_URL}` 
+    const requestHost = process.env.VERCEL_PROJECT_PRODUCTION_URL 
+      ? `${process.env.VERCEL_PROJECT_PRODUCTION_URL}` 
       : 'localhost:3000';
     
     const scheme = requestHost.includes('localhost') || requestHost.includes('127.0.0.1') ? 'http' : 'https';
