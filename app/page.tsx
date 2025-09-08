@@ -9,17 +9,13 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [mcpUrl, setMcpUrl] = useState('http://localhost:3000/mcp');
-  const [isLocal, setIsLocal] = useState(true);
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
     const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const baseUrl = isLocalHost 
       ? 'http://localhost:3000' 
       : `https://${window.location.host}`;
     
-    setIsLocal(isLocalHost);
     setMcpUrl(`${baseUrl}/mcp`);
   }, []);
 
