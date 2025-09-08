@@ -1,25 +1,16 @@
-# MCP-UI Server Demo (Next.js)
+# xmcp &lt;&gt; MCP-UI Demo (Next.js)
 
-This is a Next.js implementation of the MCP-UI server example, showcasing Model Context Protocol (MCP) with interactive UI components.
-
-## Features
-
-- **Task Dashboard**: Interactive charts showing team task status with drill-down capabilities
-- **User Profiles**: Detailed user performance analytics with interactive features  
-- **MCP Tools**: Backend MCP server with tools for task management and team collaboration
-- **Remote DOM Components**: Examples of remote DOM rendering with React and Web Components
+This is a Next.js implementation showcasing the integration between **xmcp** and **MCP-UI** with interactive UI components and a comprehensive task management system.
 
 ## Available MCP Tools
 
 ### Data Tools
-- `get_tasks_status` - Get textual representation of task status
-- `nudge_team_member` - Send nudges to team members
+- `get_tasks_status` - Get textual representation of kanban board task status
 
-### UI Tools
-- `show_task_status` - Interactive task dashboard
-- `show_user_status` - User profile interface
-- `show_remote_dom_react` - Remote DOM React component demo
-- `show_remote_dom_web_components` - Remote DOM Web Components demo
+### UI Resource Tools
+- `get_kanban_board` - Returns UI resource to render the kanban board page
+- `get_task_status_chart` - Returns UI resource to render the task status chart
+- `get_task_priority_chart` - Returns UI resource to render the task priority chart
 
 ## Getting Started
 
@@ -37,45 +28,37 @@ This is a Next.js implementation of the MCP-UI server example, showcasing Model 
 
 ## MCP Server Connection
 
-The MCP server is available at: `http://localhost:3000/mcp`
+The MCP server runs at: `http://localhost:3000/mcp`
 
-You can connect to this server using any MCP client to access the available tools.
+### Configuration
 
-## Project Structure
+Copy the appropriate configuration for your MCP client:
 
-```
-app/
-├── components/          # React components
-│   ├── Graph.tsx       # Interactive task dashboard
-│   └── User.tsx        # User profile component
-├── task/               # Task dashboard page
-├── user/               # User profile page
-├── utils/              # Utility functions
-└── mcp/                # MCP API route
-tools/                  # MCP tool definitions
-├── get_tasks_status.ts
-├── nudge_team_member.ts
-├── show_task_status.ts
-├── show_user_status.ts
-├── show_remote_dom_react.ts
-└── show_remote_dom_web_components.ts
+**For Cursor:**
+```json
+{
+  "mcpServers": {
+    "my-project": {
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
 ```
 
-## Migration from React Router
+**For Claude Desktop:**
+```json
+{
+  "mcpServers": {
+    "my-project": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "http://localhost:3000/mcp"]
+    }
+  }
+}
+```
 
-This example was migrated from the original React Router implementation in `examples/server/`. Key changes include:
+## Learn More
 
-- Converted from React Router to Next.js App Router
-- Migrated MCP server logic to xmcp tools
-- Updated UI components to work with Next.js
-- Added proper TypeScript types and error handling
-- Enhanced landing page with better UX
-
-## Technologies Used
-
-- **Next.js 15** - React framework with App Router
-- **React 19** - UI library
-- **Recharts** - Chart library for data visualization
-- **Tailwind CSS** - Utility-first CSS framework
-- **xmcp** - MCP server implementation for Next.js
-- **TypeScript** - Type safety and better developer experience
+- **xmcp**: [xmcp.dev](https://xmcp.dev) - TypeScript framework for building MCP servers
+- **MCP-UI**: [mcpui.dev](https://mcpui.dev) - Build dynamic UIs for MCP applications  
+- **Model Context Protocol**: [modelcontextprotocol.io/introduction](https://modelcontextprotocol.io/introduction) - Open standard for AI-tool integration
